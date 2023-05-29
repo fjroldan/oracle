@@ -87,8 +87,8 @@ pipeline {
                     //env.SECUENCY_LIST = params.secuency_list_param.split(',')
                     //echo "[INFO]: Aplicando secuencia ${env.SECUENCY_LIST}"
 
-                    def secuencyList = params.secuency_list_param.split(',')
-                    env.SECUENCY_LIST = eval(secuencyList) 
+                    def secuencyList = params.secuency_list_param.split(',').collect { it.trim() }
+                    env.SECUENCY_LIST = secuencyList
                 }
             }  
         } // Fin de traer el repositorio.
