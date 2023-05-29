@@ -20,13 +20,14 @@
 @NonCPS
 def listFiles(File dir) {
     def result = [:]
-    def files = findFiles(glob: '**', excludes: '', dir: "${dir.absolutePath}")
+    def workspacePath = pwd()
+    def files = findFiles(glob: '**', excludes: '', dir: dir.getCanonicalPath())
     files.each { file ->
-        def relativePath = file.path - dir.absolutePath - '/'
-        if (file.directory) {
-            result.put(file.path, listFiles(new File(dir, relativePath)))
+        def relativePath = file.getPath().replaceFirst(dir.getCanonicalPath(), '')
+        if (file.isDirectory()) {
+            result.put(file.getCanonicalPath(), listFiles(new File(dir, relativePath)))
         } else {
-            result.put(file.path, 'File')
+            result.put(file.getCanonicalPath(), 'File')
         }
     }
     return result
