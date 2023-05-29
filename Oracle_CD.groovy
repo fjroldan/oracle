@@ -69,7 +69,7 @@ pipeline {
             defaultValue: 'root'
         )
         string(
-            name: 'reomte_path_param',
+            name: 'remote_path_param',
             description: 'Ingrese la ruta destino o espacio de trabajo',
             defaultValue: '/tmp/archivos'
         )
