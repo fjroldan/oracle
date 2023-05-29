@@ -80,11 +80,12 @@ pipeline {
         stage('Checkout y Preparación') {
             steps {
                 // Trae el repositorio.
-                checkout([
-                    $class: 'GitSCM', 
-                    branches: ["${params.branch_param}"],
-                    userRemoteConfigs: [[url: "${params.repo_param}"]]
-                ])
+                git branch: "${params.branch_param}", url: "${params.repo_param}"
+                //checkout([
+                //    $class: 'GitSCM', 
+                //    branches: ["${params.branch_param}"],
+                //    userRemoteConfigs: [[url: "${params.repo_param}"]]
+                //])
                 // Define variables.
                 script {
                     def secuency_list = params.secuency_list_param.split(',');
