@@ -22,18 +22,17 @@ def listFiles(String directory) {
 
     print("*1")
 
-    def output = script(returnStdout: true) {
-        sh "ls -p ${directory}"
-    }
-    
-    def files = output.trim().tokenize('\n')
-    
-    files.each { file ->
-        result.put(file, file.endsWith("/") ? 'Directory' : 'File')
+    script {
+        def output = sh(script: "ls -p ${directory}", returnStdout: true).trim()
+        def files = output.tokenize('\n')
+
+        files.each { file ->
+            result.put(file, file.endsWith("/") ? 'Directory' : 'File')
+        }
+
+        print("Resultado: ${result}")
     }
 
-    print("Resultado: ${result}")
-    
     return result
 }
 
