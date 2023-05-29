@@ -17,18 +17,18 @@
  * @param dir Directorio a listar.
  * @return Mapa de archivos.
  */
+@NonCPS
 def listFiles(String directory) {
-    def result = [:]   
-    dir(directory) {
-        sh 'ls -R -p1 | grep -v /$'  // Use any appropriate command to list files
-        
-        def output = readFile('output.txt').trim()
-        def files = output.tokenize('\n')
-        
-        files.each { file ->
-            result.put(file, 'File')
-        }
+    def result = [:]
+    
+    def files = findFiles(glob: "${directory}/**", excludes: '')
+    
+    files.each { file ->
+        def filePath = file.path
+        def fileName = filePath.substring(filePath.lastIndexOf('/') + 1)
+        result.put(fileName, file.directory ? 'Directory' : 'File')
     }
+    
     return result
 }
 
