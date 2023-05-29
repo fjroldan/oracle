@@ -102,7 +102,7 @@ pipeline {
                         sh "pwd"
                         echo "LS"
                         sh "ls -l"
-                        fileMap = listFiles(params.directory_param)
+                        fileMap = listFiles(".")
                     }
                 }
 			}
