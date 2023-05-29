@@ -110,7 +110,8 @@ pipeline {
                 script {
                     //withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
                     //sshagent(['production']) {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'production', usernameVariable: 'root', passphraseVariable: '')]) {
+                    withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
+  
                         def dir = ""
                         def remoteHost = params.remote_host_param
                         def remoteUser = params.remote_user_param
@@ -131,7 +132,8 @@ pipeline {
                 script {
                     //withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
                     //sshagent(['production']) {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'production', usernameVariable: 'root', passphraseVariable: '')]) {
+                    withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
+  
                         def localFile = ""
                         def localFilesList = null
                         def remoteHost = params.remote_host_param
