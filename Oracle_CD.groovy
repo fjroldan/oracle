@@ -101,17 +101,18 @@ pipeline {
         // Transfiere los scripts
 		stage ("transfiere los scripts") {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
-                        def remoteHost = params.remote_host_param
-                        def remotePath = params.remote_path_param
-                        def secuency_list = params.secuency_list_param.split(',')
-                        secuency_list.each { directory ->
-                            print("[INFO]: Transfiriendo directorio: ${directory}")
-                            //sh "scp -r \"${directory}\" ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}"
-                            sh """
-                                scp -r ${directory} \${SSH_USERNAME}:\${SSH_PASSWORD}@${remoteHost}:${remotePath}
-                            """
+                dir(params.directory_param) {
+                    script {
+                        withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
+                            def remoteHost = params.remote_host_param
+                            def remotePath = params.remote_path_param
+                            def secuency_list = params.secuency_list_param.split(',')
+                            secuency_list.each { directory ->
+                                print("[INFO]: Transfiriendo directorio: ${directory}")
+                                sh """
+                                    scp -r ${directory} \${SSH_USERNAME}:\${SSH_PASSWORD}@${remoteHost}:${remotePath}
+                                """
+                            }
                         }
                     }
                 }
