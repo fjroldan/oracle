@@ -81,11 +81,6 @@ pipeline {
             steps {
                 // Trae el repositorio.
                 git branch: "${params.branch_param}", url: "${params.repo_param}"
-                //checkout([
-                //    $class: 'GitSCM', 
-                //    branches: ["${params.branch_param}"],
-                //    userRemoteConfigs: [[url: "${params.repo_param}"]]
-                //])
                 // Define variables.
                 script {
                     def secuency_list = params.secuency_list_param.split(',');
@@ -100,7 +95,8 @@ pipeline {
 			steps {
 				dir(params.directory_param) {
                     script {
-                        fileMap = listFiles(params.directory_param)
+                        def directoryFile = new File(params.directory_param)
+                        fileMap = listFiles(directoryFile)
                     }
                 }
 			}
