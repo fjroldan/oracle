@@ -128,7 +128,8 @@ pipeline {
 		stage ("Ejecucion de los scripts") {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
+                    //withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
+                    sshagent(['production']) {
                         def localFile = ""
                         def localFilesList = null
                         def remoteHost = params.remote_host_param
