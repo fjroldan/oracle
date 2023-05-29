@@ -74,23 +74,23 @@ pipeline {
         )
     }
 
-    // Define variables.
-    script {
-        def secuency_list = params.secuency_list_param.split(',');
-        echo "[INFO]: Aplicando secuencia ${secuency_list}";
-        def fileMap = null;
-    }
-    
     stages {
 
         // Trae el repositorio.
-        stage('Checkout Característica') {
+        stage('Checkout y Preparación') {
             steps {
+                // Trae el repositorio.
                 checkout([
                     $class: 'GitSCM', 
                     branches: ['${params.branch_param}'],
                     userRemoteConfigs: [[url: '${params.repo_param}']]
                 ])
+                // Define variables.
+                script {
+                    def secuency_list = params.secuency_list_param.split(',');
+                    echo "[INFO]: Aplicando secuencia ${secuency_list}";
+                    def fileMap = null;
+                }
             }  
         } // Fin de traer el repositorio.
 
