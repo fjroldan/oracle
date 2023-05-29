@@ -84,10 +84,11 @@ pipeline {
                 git branch: "${params.branch_param}", url: "${params.repo_param}"
                 // Define variables.
                 script {
-                    def secuency_list = params.secuency_list_param.split(',')
-                    print("Secuencia de ejecución: ${secuency_list}")
-                    env.SECUENCY_LIST = secuency_list
-                    echo "[INFO]: Aplicando secuencia ${env.SECUENCY_LIST}" 
+                    //env.SECUENCY_LIST = params.secuency_list_param.split(',')
+                    //echo "[INFO]: Aplicando secuencia ${env.SECUENCY_LIST}"
+
+                    def secuencyList = params.secuency_list_param.split(',')
+                    env.SECUENCY_LIST = eval(secuencyList) 
                 }
             }  
         } // Fin de traer el repositorio.
@@ -109,21 +110,10 @@ pipeline {
 		stage ("transfiere los scripts") {
             steps {
                 script {
-                    //withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
-                    //sshagent(['production']) {
                     withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
-  
-                        print("Inicia transferencia de los scripts...")
-                        def dir = ""
                         def remoteHost = params.remote_host_param
-                        def remoteUser = params.remote_user_param
-                        def sshKeyFile = "${env.SSH_KEYFILE}"
                         def remotePath = params.remote_path_param
-
                         env.SECUENCY_LIST.each { directory ->
-                        //for (directory : env.SECUENCY_LIST) {
-                            dir = "${params.remote_path_param}/${directory}"
-                            //sh "scp -i ${sshKeyFile} ${dir} ${remoteUser}@${remoteHost}:${remotePath}"
                             print("Directorio: ${directory}")
                             sh '''scp -r ${directory} ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}'''
                         }
