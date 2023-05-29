@@ -107,15 +107,17 @@ pipeline {
 
         // Transfiere los scripts
 		stage ("transfiere los scripts") {
-            withCredentials([sshUserPrivateKey(credentialsId: 'ssh-creds', keyFileVariable: 'SSH_KEYFILE', passphraseVariable: '', usernameVariable: 'SSH_USER')]) {
-                def dir = ""
-                def remoteHost = params.remote_host_param
-                def remoteUser = params.remote_user_param
-                def sshKeyFile = "${env.SSH_KEYFILE}"
-                def remotePath = params.remote_path_param
-                for (directory in secuency_list_param) {
-                    dir = "${params.remote_path_param}/${directory}"
-                    sh "scp -i ${sshKeyFile} ${dir} ${remoteUser}@${remoteHost}:${remotePath}"
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-creds', keyFileVariable: 'SSH_KEYFILE', passphraseVariable: '', usernameVariable: 'SSH_USER')]) {
+                    def dir = ""
+                    def remoteHost = params.remote_host_param
+                    def remoteUser = params.remote_user_param
+                    def sshKeyFile = "${env.SSH_KEYFILE}"
+                    def remotePath = params.remote_path_param
+                    for (directory in secuency_list_param) {
+                        dir = "${params.remote_path_param}/${directory}"
+                        sh "scp -i ${sshKeyFile} ${dir} ${remoteUser}@${remoteHost}:${remotePath}"
+                    }
                 }
             }
         } // Fin de transferencia de los scripts.
