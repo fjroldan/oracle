@@ -110,7 +110,7 @@ pipeline {
                             secuency_list.each { directory ->
                                 print("[INFO]: Transfiriendo directorio: ${directory}")
                                 sh """
-                                    sshpass -p \"\${SSH_PASSWORD}\" scp -r ${directory} \${SSH_USERNAME}@${remoteHost}:${remotePath}
+                                    sshpass -p \${SSH_PASSWORD} scp -r ${directory} \${SSH_USERNAME}@${remoteHost}:${remotePath}
                                 """
                             }
                         }
@@ -119,33 +119,22 @@ pipeline {
             }
         } // Fin de transferencia de los scripts.
 
-/*
         // Ejecuta los scripts
 		stage ("Ejecucion de los scripts") {
             steps {
                 script {
-                    //withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
-                    //sshagent(['production']) {
-                    withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
-  
-                        def localFile = ""
+                    withCredentials([usernamePassword(credentialsId: 'nuevoprod', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {                        
                         def localFilesList = null
                         def remoteHost = params.remote_host_param
-                        def remoteUser = params.remote_user_param
-                        def sshKeyFile = "${env.SSH_KEYFILE}"
                         def remotePath = params.remote_path_param
                         for (directory in secuency_list_param) {
                             localFilesList = fileMap[directory]
                             for (localFileName in localFilesList) {
-                                localFile = "${params.remote_path_param}/${localFileName}"
                                 try {
-                                    //ssh remote: "${remoteUser}@${remoteHost}", command: "cat ${remotePath}/${localFile} | sqlplus scott/tiger@orcl"
-                                    //ssh remote: "${remoteUser}@${remoteHost}", command: "sqlplus -S scott/tiger@orcl << EOF\n$(cat ${remotePath}/${localFile})\nEOF"
-                                    //sh "ssh ${remoteUser}@${remoteHost} 'cat ${remotePath}/${localFile} | sqlplus -S scott/tiger@orcl'"
                                     def sqlResult = sh (
                                         script: """
-                                            ssh ${remoteUser}@${remoteHost} 'sqlplus -S ${DB_USER}/${DB_PASS}@orcl' << EOF
-                                            \$(cat /path/to/sql/file.sql)
+                                            sshpass -p \${SSH_PASSWORD} ssh \${SSH_USERNAME}@${remoteHost} 'sqlplus /@"DESCRIPTION=(ADDRES_LIST=(ADDRESS=PROTOCOL=TCP)(HOST=GUAZAPA)(PORT=1525)"' << EOF
+                                            \$(cat ${remotePath}/${localFileName})
                                             EOF
                                         """,
                                         returnStdout: true
@@ -162,7 +151,7 @@ pipeline {
                 }   
             } 
 		} // Fin de ejecucion de los scripts.
-*/    
+
     } // Fin de stages.
 
     post {
