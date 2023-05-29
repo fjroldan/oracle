@@ -19,7 +19,7 @@
  */
 def listFiles(File dir) {
     def result = [:]
-    dir.eachFile { file ->
+    fileTree(dir: dir).visit { file ->
         if (file.isDirectory()) {
             result.put(file.getName(), listFiles(file))
         } else {
