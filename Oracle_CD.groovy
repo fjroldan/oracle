@@ -112,6 +112,7 @@ pipeline {
                     //sshagent(['production']) {
                     withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
   
+                        print("Inicia transferencia de los scripts...")
                         def dir = ""
                         def remoteHost = params.remote_host_param
                         def remoteUser = params.remote_user_param
@@ -119,13 +120,16 @@ pipeline {
                         def remotePath = params.remote_path_param
                         for (directory in secuency_list_param) {
                             dir = "${params.remote_path_param}/${directory}"
-                            sh "scp -i ${sshKeyFile} ${dir} ${remoteUser}@${remoteHost}:${remotePath}"
+                            //sh "scp -i ${sshKeyFile} ${dir} ${remoteUser}@${remoteHost}:${remotePath}"
+                            print("Directorio: ${directory}")
+                            sh "scp -r ${directory} $SSH_USERNAME:$SSH_PASSWORD@${remoteHost}:${remotePath}"
                         }
                     }
                 }
             }
         } // Fin de transferencia de los scripts.
 
+/*
         // Ejecuta los scripts
 		stage ("Ejecucion de los scripts") {
             steps {
@@ -168,7 +172,7 @@ pipeline {
                 }   
             } 
 		} // Fin de ejecucion de los scripts.
-    
+*/    
     } // Fin de stages.
 
     post {
