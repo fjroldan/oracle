@@ -87,7 +87,7 @@ pipeline {
                     //env.SECUENCY_LIST = params.secuency_list_param.split(',')
                     //echo "[INFO]: Aplicando secuencia ${env.SECUENCY_LIST}"
 
-                    def secuencyList = params.secuency_list_param.split(',').collect { it.trim() }
+                    def secuencyList = params.secuency_list_param.tokenize(',')
                     env.SECUENCY_LIST = secuencyList
                 }
             }  
