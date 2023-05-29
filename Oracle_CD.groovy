@@ -84,9 +84,8 @@ pipeline {
                 git branch: "${params.branch_param}", url: "${params.repo_param}"
                 // Define variables.
                 script {
-                    def secuency_list = params.secuency_list_param.split(',');
-                    echo "[INFO]: Aplicando secuencia ${secuency_list}";
-                    def fileMap = null;
+                    env.SECUENCY_LIST = params.secuency_list_param.split(',');
+                    echo "[INFO]: Aplicando secuencia ${env.SECUENCY_LIST}"; 
                 }
             }  
         } // Fin de traer el repositorio.
@@ -97,8 +96,8 @@ pipeline {
 				dir(params.directory_param) {
                     script {
                         echo "[INFO]: Preparando scripts";
-                        fileMap = listFiles("./")
-                        print("Mapa de archivos: ${fileMap}")
+                        env.FILE_MAP =  = listFiles("./")
+                        print("Mapa de archivos: ${env.FILE_MAP}")
                     }
                 }
 			}
@@ -118,7 +117,7 @@ pipeline {
                         def remoteUser = params.remote_user_param
                         def sshKeyFile = "${env.SSH_KEYFILE}"
                         def remotePath = params.remote_path_param
-                        for (directory in secuency_list) {
+                        for (directory in env.SECUENCY_LIST) {
                             dir = "${params.remote_path_param}/${directory}"
                             //sh "scp -i ${sshKeyFile} ${dir} ${remoteUser}@${remoteHost}:${remotePath}"
                             print("Directorio: ${directory}")
