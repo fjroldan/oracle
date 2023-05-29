@@ -17,17 +17,16 @@
  * @param dir Directorio a listar.
  * @return Mapa de archivos.
  */
-@NonCPS
-def listFiles(File dir) {
-    def result = [:]
-    def workspacePath = pwd()
-    def files = findFiles(glob: '**', excludes: '', dir: dir.getCanonicalPath())
-    files.each { file ->
-        def relativePath = file.getPath().replaceFirst(dir.getCanonicalPath(), '')
-        if (file.isDirectory()) {
-            result.put(file.getCanonicalPath(), listFiles(new File(dir, relativePath)))
-        } else {
-            result.put(file.getCanonicalPath(), 'File')
+def listFiles(String directory) {
+    def result = [:]   
+    dir(directory) {
+        sh 'ls -R -p1 | grep -v /$'  // Use any appropriate command to list files
+        
+        def output = readFile('output.txt').trim()
+        def files = output.tokenize('\n')
+        
+        files.each { file ->
+            result.put(file, 'File')
         }
     }
     return result
