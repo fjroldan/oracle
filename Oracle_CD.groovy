@@ -17,13 +17,16 @@
  * @param dir Directorio a listar.
  * @return Mapa de archivos.
  */
+@NonCPS
 def listFiles(File dir) {
     def result = [:]
-    fileTree(dir: dir).visit { file ->
-        if (file.isDirectory()) {
-            result.put(file.getName(), listFiles(file))
+    def files = findFiles(glob: '**', excludes: '', dir: "${dir.absolutePath}")
+    files.each { file ->
+        def relativePath = file.path - dir.absolutePath - '/'
+        if (file.directory) {
+            result.put(file.path, listFiles(new File(dir, relativePath)))
         } else {
-            result.put(file.getName(), "File")
+            result.put(file.path, 'File')
         }
     }
     return result
