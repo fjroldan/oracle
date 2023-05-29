@@ -109,7 +109,7 @@ pipeline {
 		stage ("transfiere los scripts") {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-creds', keyFileVariable: 'SSH_KEYFILE', passphraseVariable: '', usernameVariable: 'SSH_USER')]) {
-                    def dir = ""
+                    def dir = "";
                     def remoteHost = params.remote_host_param
                     def remoteUser = params.remote_user_param
                     def sshKeyFile = "${env.SSH_KEYFILE}"
