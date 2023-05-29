@@ -1,0 +1,17 @@
+# Define the version on dockcer-compose.yml
+version: '3.3'
+
+# -------------------------------------------
+# Servicios del entorno
+services:
+
+  # ------------------------------------------
+  # SERVICIOS DEL COMPONENTE DE DATOS
+  # ------------------------------------------
+
+  # Servicio de base de datos del sistema
+  sonarqube-svc:
+    image: sonarqube:9.8-community
+    container_name: sonarqube
+    ports:
+      - "9000:9000"

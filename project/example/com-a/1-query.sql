@@ -1,0 +1,4 @@
+SELECT username AS usr1 FROM all_users;
+
+CREATE TABLE
+CREATE TABLE

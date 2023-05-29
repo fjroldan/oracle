@@ -1,0 +1,1 @@
+/opt/sonar-scanner/bin/sonar-scanner;
