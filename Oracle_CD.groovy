@@ -27,6 +27,8 @@ def listFiles(String directory) {
     files.each { file ->
         result.put(file, file.endsWith("/") ? 'Directory' : 'File')
     }
+
+    print("Resultado: ${result}")
     
     return result
 }
