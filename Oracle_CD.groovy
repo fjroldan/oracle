@@ -21,6 +21,8 @@
 def listFiles(String directory) {
     def result = [:]
     
+    print("*1")
+
     def output = sh(script: "ls -p ${directory}", returnStdout: true).trim()
     def files = output.tokenize('\n')
     
