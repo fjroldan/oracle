@@ -120,7 +120,7 @@ pipeline {
                         def sshKeyFile = "${env.SSH_KEYFILE}"
                         def remotePath = params.remote_path_param
 
-                        strings.each { directory ->
+                        env.SECUENCY_LIST.each { directory ->
                         //for (directory : env.SECUENCY_LIST) {
                             dir = "${params.remote_path_param}/${directory}"
                             //sh "scp -i ${sshKeyFile} ${dir} ${remoteUser}@${remoteHost}:${remotePath}"
