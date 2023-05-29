@@ -109,11 +109,9 @@ pipeline {
                         secuency_list.each { directory ->
                             print("[INFO]: Transfiriendo directorio: ${directory}")
                             //sh "scp -r \"${directory}\" ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}"
-                            sh '''
-                                export SSH_USERNAME="${USERNAME}"
-                                export SSH_PASSWORD="${PASSWORD}"
-                                scp -r "${directory}" "${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}"
-                            '''
+                            sh """
+                                scp -r ${directory} \${SSH_USERNAME}:\${SSH_PASSWORD}@${remoteHost}:${remotePath}
+                            """
                         }
                     }
                 }
