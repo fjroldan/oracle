@@ -103,8 +103,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
+                        print("Transmision")
                         def remoteHost = params.remote_host_param
+                        println("Host: ${remoteHost}")
                         def remotePath = params.remote_path_param
+                        println("Path: ${remotePath}")
                         def secuency_list = params.secuency_list_param.split(',')
                         secuency_list.each { directory ->
                             print("Directorio: ${directory}")
