@@ -82,8 +82,8 @@ pipeline {
                 // Trae el repositorio.
                 checkout([
                     $class: 'GitSCM', 
-                    branches: ['${params.branch_param}'],
-                    userRemoteConfigs: [[url: '${params.repo_param}']]
+                    branches: ["${params.branch_param}"],
+                    userRemoteConfigs: [[url: "${params.repo_param}"]]
                 ])
                 // Define variables.
                 script {
