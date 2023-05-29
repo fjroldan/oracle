@@ -98,8 +98,7 @@ pipeline {
 			steps {
 				dir(params.directory_param) {
                     script {
-                        def directoryFile = new File(params.directory_param)
-                        fileMap = listFiles(directoryFile)
+                        fileMap = listFiles(params.directory_param)
                     }
                 }
 			}
