@@ -103,16 +103,17 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'production', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
-                        print("Transmision")
                         def remoteHost = params.remote_host_param
-                        println("Host: ${remoteHost}")
                         def remotePath = params.remote_path_param
-                        println("Path: ${remotePath}")
                         def secuency_list = params.secuency_list_param.split(',')
                         secuency_list.each { directory ->
-                            print("Directorio: ${directory}")
-                            //sh '''scp -r ${directory} ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}'''
-                            sh "scp -r \"${directory}\" ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}"
+                            print("[INFO]: Transfiriendo directorio: ${directory}")
+                            //sh "scp -r \"${directory}\" ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}"
+                            sh '''
+                                export SSH_USERNAME="${USERNAME}"
+                                export SSH_PASSWORD="${PASSWORD}"
+                                scp -r "${directory}" "${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}"
+                            '''
                         }
                     }
                 }
