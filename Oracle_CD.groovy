@@ -41,34 +41,32 @@ pipeline {
             name: 'secuency_list_param',
             description: 'Ingrese la secuencia de ejecución de los nombres de las carpetas separadas por comas',
             defaultValue: 'com-a,com-b'
-        ),
+        )
         string(
             name: 'directory_param',
             description: 'Ingrese la ruta hacia los archivos .sql a aplicar',
             defaultValue: 'project/example'
-        ),
+        )
         string(
             name: 'repo_param',
             description: 'Ingrese la URL del repositorio a aplicar',
             defaultValue: 'https://github.com/fjroldan/oracle.git'
-        ),
+        )
         string(
             name: 'branch_param',
             description: 'Ingrese la rama del repositorio a aplicar',
             defaultValue: 'main'
-        ),
-        
-
+        )
         string(
             name: 'remote_host_param',
             description: 'Ingrese el servidor destino',
             defaultValue: 'your.remote.host.com'
-        ),
+        )
         string(
             name: 'remote_user_param',
             description: 'Ingrese el usuario remoto',
             defaultValue: 'ubuntu'
-        ),
+        )
         string(
             name: 'Reomte_path_param',
             description: 'Ingrese la ruta destino o espacio de trabajo',
