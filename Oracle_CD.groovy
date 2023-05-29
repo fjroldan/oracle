@@ -21,12 +21,11 @@
 def listFiles(String directory) {
     def result = [:]
     
-    def files = findFiles(glob: "${directory}/**", excludes: '')
+    def output = sh(script: "ls -p ${directory}", returnStdout: true).trim()
+    def files = output.tokenize('\n')
     
     files.each { file ->
-        def filePath = file.path
-        def fileName = filePath.substring(filePath.lastIndexOf('/') + 1)
-        result.put(fileName, file.directory ? 'Directory' : 'File')
+        result.put(file, file.endsWith("/") ? 'Directory' : 'File')
     }
     
     return result
