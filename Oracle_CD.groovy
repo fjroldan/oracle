@@ -109,7 +109,7 @@ pipeline {
 		stage ("transfiere los scripts") {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {    
+                    withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
                         def dir = ""
                         def remoteHost = params.remote_host_param
                         def remoteUser = params.remote_user_param
@@ -126,37 +126,41 @@ pipeline {
 
         // Ejecuta los scripts
 		stage ("Ejecucion de los scripts") {
-			withCredentials([sshUserPrivateKey(credentialsId: 'ssh-creds', keyFileVariable: 'SSH_KEYFILE', passphraseVariable: '', usernameVariable: 'SSH_USER')]) {
-                def localFile = ""
-                def localFilesList = null
-                def remoteHost = params.remote_host_param
-                def remoteUser = params.remote_user_param
-                def sshKeyFile = "${env.SSH_KEYFILE}"
-                def remotePath = params.remote_path_param
-                for (directory in secuency_list_param) {
-                    localFilesList = fileMap[directory]
-                    for (localFileName in localFilesList) {
-                        localFile = "${params.remote_path_param}/${localFileName}"
-                        try {
-                            //ssh remote: "${remoteUser}@${remoteHost}", command: "cat ${remotePath}/${localFile} | sqlplus scott/tiger@orcl"
-                            //ssh remote: "${remoteUser}@${remoteHost}", command: "sqlplus -S scott/tiger@orcl << EOF\n$(cat ${remotePath}/${localFile})\nEOF"
-                            //sh "ssh ${remoteUser}@${remoteHost} 'cat ${remotePath}/${localFile} | sqlplus -S scott/tiger@orcl'"
-                            def sqlResult = sh (
-                                script: """
-                                    ssh ${remoteUser}@${remoteHost} 'sqlplus -S ${DB_USER}/${DB_PASS}@orcl' << EOF
-                                    \$(cat /path/to/sql/file.sql)
-                                    EOF
-                                """,
-                                returnStdout: true
-                            )
-                            stash name: 'sql-result', includes: 'sql-result.txt'
-                            writeFile file: 'sql-result.txt', text: sqlResult
-                        } catch (err) {
-                            error "Error running SQL file: ${err}"
-                            //...
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
+                        def localFile = ""
+                        def localFilesList = null
+                        def remoteHost = params.remote_host_param
+                        def remoteUser = params.remote_user_param
+                        def sshKeyFile = "${env.SSH_KEYFILE}"
+                        def remotePath = params.remote_path_param
+                        for (directory in secuency_list_param) {
+                            localFilesList = fileMap[directory]
+                            for (localFileName in localFilesList) {
+                                localFile = "${params.remote_path_param}/${localFileName}"
+                                try {
+                                    //ssh remote: "${remoteUser}@${remoteHost}", command: "cat ${remotePath}/${localFile} | sqlplus scott/tiger@orcl"
+                                    //ssh remote: "${remoteUser}@${remoteHost}", command: "sqlplus -S scott/tiger@orcl << EOF\n$(cat ${remotePath}/${localFile})\nEOF"
+                                    //sh "ssh ${remoteUser}@${remoteHost} 'cat ${remotePath}/${localFile} | sqlplus -S scott/tiger@orcl'"
+                                    def sqlResult = sh (
+                                        script: """
+                                            ssh ${remoteUser}@${remoteHost} 'sqlplus -S ${DB_USER}/${DB_PASS}@orcl' << EOF
+                                            \$(cat /path/to/sql/file.sql)
+                                            EOF
+                                        """,
+                                        returnStdout: true
+                                    )
+                                    stash name: 'sql-result', includes: 'sql-result.txt'
+                                    writeFile file: 'sql-result.txt', text: sqlResult
+                                } catch (err) {
+                                    error "Error running SQL file: ${err}"
+                                    //...
+                                }
+                            }
                         }
-                    }
-                }
+                    }                    
+                }   
             } 
 		} // Fin de ejecucion de los scripts.
     
