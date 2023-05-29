@@ -17,14 +17,16 @@
  * @param dir Directorio a listar.
  * @return Mapa de archivos.
  */
-@NonCPS
 def listFiles(String directory) {
     def result = [:]
-    
+
     print("*1")
 
-    def output = sh(script: "ls -p ${directory}", returnStdout: true).trim()
-    def files = output.tokenize('\n')
+    def output = script(returnStdout: true) {
+        sh "ls -p ${directory}"
+    }
+    
+    def files = output.trim().tokenize('\n')
     
     files.each { file ->
         result.put(file, file.endsWith("/") ? 'Directory' : 'File')
