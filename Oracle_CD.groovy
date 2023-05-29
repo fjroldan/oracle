@@ -56,6 +56,23 @@ pipeline {
             name: 'branch_param',
             description: 'Ingrese la rama del repositorio a aplicar',
             defaultValue: 'main'
+        ),
+        
+
+        string(
+            name: 'remote_host_param',
+            description: 'Ingrese el servidor destino',
+            defaultValue: 'your.remote.host.com'
+        ),
+        string(
+            name: 'remote_user_param',
+            description: 'Ingrese el usuario remoto',
+            defaultValue: 'ubuntu'
+        ),
+        string(
+            name: 'Reomte_path_param',
+            description: 'Ingrese la ruta destino o espacio de trabajo',
+            defaultValue: '/remote/path/to/destination'
         )
     }
 
@@ -94,12 +111,12 @@ pipeline {
 		stage ("transfiere los scripts") {
             withCredentials([sshUserPrivateKey(credentialsId: 'ssh-creds', keyFileVariable: 'SSH_KEYFILE', passphraseVariable: '', usernameVariable: 'SSH_USER')]) {
                 def dir = ""
-                def remoteHost = 'your.remote.host.com'
-                def remoteUser = "${env.SSH_USER}"
+                def remoteHost = params.remote_host_param
+                def remoteUser = params.remote_user_param
                 def sshKeyFile = "${env.SSH_KEYFILE}"
-                def remotePath = '/remote/path/to/destination'
+                def remotePath = params.remote_path_param
                 for (directory in secuency_list_param) {
-                    dir = "/local/path/to/${directory}"
+                    dir = "${params.remote_path_param}/${directory}"
                     sh "scp -i ${sshKeyFile} ${dir} ${remoteUser}@${remoteHost}:${remotePath}"
                 }
             }
@@ -110,19 +127,18 @@ pipeline {
 			withCredentials([sshUserPrivateKey(credentialsId: 'ssh-creds', keyFileVariable: 'SSH_KEYFILE', passphraseVariable: '', usernameVariable: 'SSH_USER')]) {
                 def localFile = ""
                 def localFilesList = null
-                def remoteHost = 'your.remote.host.com'
-                def remoteUser = "${env.SSH_USER}"
+                def remoteHost = params.remote_host_param
+                def remoteUser = params.remote_user_param
                 def sshKeyFile = "${env.SSH_KEYFILE}"
-                def remotePath = '/remote/path/to/destination'
+                def remotePath = params.remote_path_param
                 for (directory in secuency_list_param) {
                     localFilesList = fileMap[directory]
                     for (localFileName in localFilesList) {
-                        localFile = "/local/path/to/${localFileName}"
+                        localFile = "${params.remote_path_param}/${localFileName}"
                         try {
                             //ssh remote: "${remoteUser}@${remoteHost}", command: "cat ${remotePath}/${localFile} | sqlplus scott/tiger@orcl"
                             //ssh remote: "${remoteUser}@${remoteHost}", command: "sqlplus -S scott/tiger@orcl << EOF\n$(cat ${remotePath}/${localFile})\nEOF"
                             //sh "ssh ${remoteUser}@${remoteHost} 'cat ${remotePath}/${localFile} | sqlplus -S scott/tiger@orcl'"
-                        
                             def sqlResult = sh (
                                 script: """
                                     ssh ${remoteUser}@${remoteHost} 'sqlplus -S ${DB_USER}/${DB_PASS}@orcl' << EOF
