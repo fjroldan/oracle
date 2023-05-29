@@ -110,7 +110,7 @@ pipeline {
                             secuency_list.each { directory ->
                                 print("[INFO]: Transfiriendo directorio: ${directory}")
                                 sh """
-                                    scp -r ${directory} \${SSH_USERNAME}:\${SSH_PASSWORD}@${remoteHost}:${remotePath}
+                                    sshpass -p \${SSH_PASSWORD} scp -r ${directory} \${SSH_USERNAME}@${remoteHost}:${remotePath}
                                 """
                             }
                         }
