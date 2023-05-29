@@ -96,7 +96,7 @@ pipeline {
 				dir(params.directory_param) {
                     script {
                         echo "[INFO]: Preparando scripts";
-                        env.FILE_MAP =  = listFiles("./")
+                        env.FILE_MAP = listFiles("./")
                         print("Mapa de archivos: ${env.FILE_MAP}")
                     }
                 }
