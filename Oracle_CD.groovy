@@ -78,18 +78,10 @@ pipeline {
     stages {
 
         // Trae el repositorio.
-        stage('Checkout y Preparación') {
+        stage('Checkout') {
             steps {
                 // Trae el repositorio.
                 git branch: "${params.branch_param}", url: "${params.repo_param}"
-                // Define variables.
-                script {
-                    //env.SECUENCY_LIST = params.secuency_list_param.split(',')
-                    //echo "[INFO]: Aplicando secuencia ${env.SECUENCY_LIST}"
-
-                    def secuencyList = params.secuency_list_param.tokenize(',')
-                    env.SECUENCY_LIST = secuencyList
-                }
             }  
         } // Fin de traer el repositorio.
 
@@ -116,7 +108,8 @@ pipeline {
                         def secuency_list = params.secuency_list_param.split(',')
                         secuency_list.each { directory ->
                             print("Directorio: ${directory}")
-                            sh '''scp -r ${directory} ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}'''
+                            //sh '''scp -r ${directory} ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}'''
+                            sh "scp -r \"${directory}\" ${SSH_USERNAME}:${SSH_PASSWORD}@${remoteHost}:${remotePath}"
                         }
                     }
                 }
