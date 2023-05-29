@@ -61,17 +61,17 @@ pipeline {
         string(
             name: 'remote_host_param',
             description: 'Ingrese el servidor destino',
-            defaultValue: 'your.remote.host.com'
+            defaultValue: '74.208.211.150'
         )
         string(
             name: 'remote_user_param',
             description: 'Ingrese el usuario remoto',
-            defaultValue: 'ubuntu'
+            defaultValue: 'root'
         )
         string(
             name: 'Reomte_path_param',
             description: 'Ingrese la ruta destino o espacio de trabajo',
-            defaultValue: '/remote/path/to/destination'
+            defaultValue: '/tmp/archivos'
         )
     }
 
@@ -97,12 +97,8 @@ pipeline {
 				dir(params.directory_param) {
                     script {
                         echo "[INFO]: Preparando scripts";
-                        echo "PWD"
-                        sh "pwd"
-                        echo "LS"
-                        sh "ls -l"
                         fileMap = listFiles("./")
-                        print("Resultado: ${fileMap}")
+                        print("Mapa de archivos: ${fileMap}")
                     }
                 }
 			}
@@ -112,7 +108,8 @@ pipeline {
 		stage ("transfiere los scripts") {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
+                    //withCredentials([sshUserPrivateKey(credentialsId: 'your-credentials-id', keyFileVariable: 'SSH_KEY')]) {
+                    sshagent(['production']) {
                         def dir = ""
                         def remoteHost = params.remote_host_param
                         def remoteUser = params.remote_user_param
