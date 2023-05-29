@@ -106,7 +106,7 @@ pipeline {
                         sh "pwd"
                         echo "LS"
                         sh "ls -l"
-                        fileMap = listFiles(".")
+                        fileMap = listFiles("./")
                     }
                 }
 			}
