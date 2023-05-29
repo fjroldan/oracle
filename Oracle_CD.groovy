@@ -19,20 +19,14 @@
  */
 def listFiles(String directory) {
     def result = [:]
-
-    print("*1")
-
     script {
-        def output = sh(script: "ls -p ${directory}", returnStdout: true).trim()
+        def output = sh(script: "find ${directory} -type f -o -type d", returnStdout: true).trim()
         def files = output.tokenize('\n')
-
         files.each { file ->
-            result.put(file, file.endsWith("/") ? 'Directory' : 'File')
+            def fileName = file.replaceFirst(directory, '')
+            result.put(fileName, file.endsWith("/") ? 'Directory' : 'File')
         }
-
-        print("Resultado: ${result}")
     }
-
     return result
 }
 
@@ -108,6 +102,7 @@ pipeline {
                         echo "LS"
                         sh "ls -l"
                         fileMap = listFiles("./")
+                        print("Resultado: ${fileMap}")
                     }
                 }
 			}
