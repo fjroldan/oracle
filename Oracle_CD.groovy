@@ -97,6 +97,11 @@ pipeline {
 			steps {
 				dir(params.directory_param) {
                     script {
+                        echo "[INFO]: Preparando scripts";
+                        echo "PWD"
+                        sh "pwd"
+                        echo "LS"
+                        sh "ls -l"
                         fileMap = listFiles(params.directory_param)
                     }
                 }
