@@ -98,7 +98,7 @@ pipeline {
                     }                    
                 }
             }
-        }
+        } // Fin de la fase escaneo con SonarQube.
 
         // Define la fase de validacion del escaneo.
         stage('Quality Gate') {
@@ -107,8 +107,8 @@ pipeline {
                     waitForQualityGate abortPipeline: true
                 }
             }
-        }
-        
+        } // Fin de la fase de validacion del escaneo.
+
         // Se ubica y prepara los scripts
 		stage ("Preparacion de los scripts") {
 			steps {
@@ -178,6 +178,7 @@ pipeline {
 
     } // Fin de stages.
 
+    // Define post acciones.
     post {
         always {
             cleanWs(cleanWhenNotBuilt: false,
@@ -186,5 +187,5 @@ pipeline {
                     notFailBuild: true,
                     patterns: [])
         }
-    }
-}
+    } // Fin de post acciones.
+} // Fin de pipeline.
