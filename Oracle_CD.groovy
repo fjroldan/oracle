@@ -85,6 +85,30 @@ pipeline {
             }  
         } // Fin de traer el repositorio.
 
+        // Define la fase escaneo con SonarQube.
+        stage('Validación ZonarQube') {
+            tools {
+                jdk "jdk17"
+            }
+            steps {
+                script {                                           
+                    def scannerHome = tool 'testsonar'
+                    withSonarQubeEnv() {
+                        sh "${scannerHome}/bin/sonar-scanner -X"
+                    }                    
+                }
+            }
+        }
+
+        // Define la fase de validacion del escaneo.
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        
         // Se ubica y prepara los scripts
 		stage ("Preparacion de los scripts") {
 			steps {
