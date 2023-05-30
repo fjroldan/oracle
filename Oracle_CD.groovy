@@ -10,7 +10,6 @@
 // @version 0.0.1.0
 // @date 29/05/23
 //
-// Define el pipeline
 
 /** 
  * Define funcion utilitaria para listar archivos.
@@ -188,4 +187,5 @@ pipeline {
                     patterns: [])
         }
     } // Fin de post acciones.
+
 } // Fin de pipeline.
