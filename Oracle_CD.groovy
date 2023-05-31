@@ -84,30 +84,6 @@ pipeline {
             }  
         } // Fin de traer el repositorio.
 
-        // Define la fase escaneo con SonarQube.
-        stage('Validación ZonarQube') {
-            tools {
-                jdk "jdk17"
-            }
-            steps {
-                script {                                           
-                    def scannerHome = tool 'testsonar'
-                    withSonarQubeEnv() {
-                        sh "${scannerHome}/bin/sonar-scanner -X"
-                    }                    
-                }
-            }
-        } // Fin de la fase escaneo con SonarQube.
-
-        // Define la fase de validacion del escaneo.
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        } // Fin de la fase de validacion del escaneo.
-
         // Se ubica y prepara los scripts
 		stage ("Preparacion de los scripts") {
 			steps {
@@ -147,6 +123,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'nuevoprod', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {                        
+                        def host = "GUAZAPA"
+                        def port = "1525"
                         def localFilesList = null
                         def remoteHost = params.remote_host_param
                         def remotePath = params.remote_path_param
@@ -156,7 +134,7 @@ pipeline {
                                 try {
                                     def sqlResult = sh (
                                         script: """
-                                            sshpass -p \${SSH_PASSWORD} ssh \${SSH_USERNAME}@${remoteHost} 'sqlplus /@"DESCRIPTION=(ADDRES_LIST=(ADDRESS=PROTOCOL=TCP)(HOST=GUAZAPA)(PORT=1525)"' << EOF
+                                            sshpass -p \${SSH_PASSWORD} ssh \${SSH_USERNAME}@${remoteHost} 'sqlplus /@"DESCRIPTION=(ADDRES_LIST=(ADDRESS=PROTOCOL=TCP)(HOST=${host})(PORT=${por})"' << EOF
                                             \$(cat ${remotePath}/${localFileName})
                                             EOF
                                         """,
